@@ -1,0 +1,45 @@
+## Coding Style
+
+- Do not use comments
+- Do not use Japanese in code
+
+## How to Add a New Tool
+
+To add a new tool to this MCP server, follow these three steps:
+
+1. **Define the input schema**:
+  ```typescript
+  const NewToolArgsSchema = z.object({
+    param1: z.string(),
+    param2: z.number().optional(),
+    // Add other parameters as needed
+  });
+  ```
+
+2. **Define the tool**: Add the new tool to the `TOOLS` array.
+  ```typescript
+  {
+    name: "new_tool_name",
+    description: "Provide a detailed description here. Explain what this tool does, when it should be used, and any limitations it may have.",
+    inputSchema: toToolSchema(NewToolArgsSchema),
+  },
+  ```
+
+3. **Implement the tool execution**: Add a case to the `CallToolRequestSchema` handler.
+  ```typescript
+  case "new_tool_name": {
+    const parsed = NewToolArgsSchema.safeParse(args);
+    if (!parsed.success) {
+     throw new Error(`Invalid arguments for new_tool_name: ${parsed.error}`);
+    }
+    // Validate parameters (if necessary)
+    const validPath = await validatePath(parsed.data.param1);
+    
+    // Implement the actual tool logic
+    const result = await someFunction(validPath, parsed.data.param2);
+    
+    // Return the result
+    return {
+     content: [{ type: "text", text: result }],
+    };
+  }
