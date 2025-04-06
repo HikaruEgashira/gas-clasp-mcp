@@ -12,6 +12,7 @@ import type {
     Tool,
 } from "npm:@modelcontextprotocol/sdk@1.5.0/types.js";
 import * as tools from "./tools/mod.ts";
+import { formatErrorMessage } from "./tools/error.ts";
 
 export const TOOLS: Tool[] = [
     tools.CLASP_SETUP_TOOL,
@@ -27,7 +28,7 @@ export const TOOLS: Tool[] = [
 const server = new Server(
     {
         name: "gas-clasp-mcp",
-        version: "0.2.0",
+        version: "0.1.0",
     },
     {
         capabilities: {
@@ -49,101 +50,148 @@ server.setRequestHandler(
         const name = request.params.name;
         const args = request.params.arguments ?? {};
 
-        switch (name) {
-            case "clasp_setup": {
-                const parsed = tools.ClaspSetupArgsSchema.safeParse(args);
-                if (!parsed.success) {
-                    throw new Error(`Invalid args: ${parsed.error}`);
+        try {
+            switch (name) {
+                case "clasp_setup": {
+                    const parsed = tools.ClaspSetupArgsSchema.safeParse(args);
+                    if (!parsed.success) {
+                        throw new Error(
+                            `Invalid args: ${
+                                JSON.stringify(parsed.error.format())
+                            }`,
+                        );
+                    }
+                    const output = await tools.claspSetup(parsed.data);
+                    return {
+                        content: [{
+                            type: "text",
+                            text: output,
+                        }],
+                    };
                 }
-                const output = await tools.claspSetup(parsed.data);
-                return {
-                    content: [{
-                        type: "text",
-                        text: output,
-                    }],
-                };
-            }
 
-            case "clasp_logout": {
-                const parsed = tools.ClaspLogoutArgsSchema.safeParse(args);
-                if (!parsed.success) {
-                    throw new Error(`Invalid args: ${parsed.error}`);
+                case "clasp_logout": {
+                    const parsed = tools.ClaspLogoutArgsSchema.safeParse(args);
+                    if (!parsed.success) {
+                        throw new Error(
+                            `Invalid args: ${
+                                JSON.stringify(parsed.error.format())
+                            }`,
+                        );
+                    }
+                    const result = await tools.claspLogout(parsed.data);
+                    return {
+                        content: [{
+                            type: "text",
+                            text: result,
+                        }],
+                    };
                 }
-                const result = await tools.claspLogout(parsed.data);
-                return {
-                    content: [{
-                        type: "text",
-                        text: result,
-                    }],
-                };
-            }
 
-            case "clasp_create": {
-                const parsed = tools.ClaspCreateArgsSchema.safeParse(args);
-                if (!parsed.success) {
-                    throw new Error(`Invalid args: ${parsed.error}`);
+                case "clasp_create": {
+                    const parsed = tools.ClaspCreateArgsSchema.safeParse(args);
+                    if (!parsed.success) {
+                        throw new Error(
+                            `Invalid args: ${
+                                JSON.stringify(parsed.error.format())
+                            }`,
+                        );
+                    }
+                    const result = await tools.claspCreate(parsed.data);
+                    return { content: [{ type: "text", text: result }] };
                 }
-                const result = await tools.claspCreate(parsed.data);
-                return { content: [{ type: "text", text: result }] };
-            }
 
-            case "clasp_clone": {
-                const parsed = tools.ClaspCloneArgsSchema.safeParse(args);
-                if (!parsed.success) {
-                    throw new Error(`Invalid args: ${parsed.error}`);
+                case "clasp_clone": {
+                    const parsed = tools.ClaspCloneArgsSchema.safeParse(args);
+                    if (!parsed.success) {
+                        throw new Error(
+                            `Invalid args: ${
+                                JSON.stringify(parsed.error.format())
+                            }`,
+                        );
+                    }
+                    const result = await tools.claspClone(parsed.data);
+                    return { content: [{ type: "text", text: result }] };
                 }
-                const result = await tools.claspClone(parsed.data);
-                return { content: [{ type: "text", text: result }] };
-            }
 
-            case "clasp_pull": {
-                const parsed = tools.ClaspPullArgsSchema.safeParse(args);
-                if (!parsed.success) {
-                    throw new Error(`Invalid args: ${parsed.error}`);
+                case "clasp_pull": {
+                    const parsed = tools.ClaspPullArgsSchema.safeParse(args);
+                    if (!parsed.success) {
+                        throw new Error(
+                            `Invalid args: ${
+                                JSON.stringify(parsed.error.format())
+                            }`,
+                        );
+                    }
+                    const result = await tools.claspPull(parsed.data);
+                    return { content: [{ type: "text", text: result }] };
                 }
-                const result = await tools.claspPull(parsed.data);
-                return { content: [{ type: "text", text: result }] };
-            }
 
-            case "clasp_push": {
-                const parsed = tools.ClaspPushArgsSchema.safeParse(args);
-                if (!parsed.success) {
-                    throw new Error(`Invalid args: ${parsed.error}`);
+                case "clasp_push": {
+                    const parsed = tools.ClaspPushArgsSchema.safeParse(args);
+                    if (!parsed.success) {
+                        throw new Error(
+                            `Invalid args: ${
+                                JSON.stringify(parsed.error.format())
+                            }`,
+                        );
+                    }
+                    const result = await tools.claspPush(parsed.data);
+                    return { content: [{ type: "text", text: result }] };
                 }
-                const result = await tools.claspPush(parsed.data);
-                return { content: [{ type: "text", text: result }] };
-            }
 
-            case "clasp_deploy": {
-                const parsed = tools.ClaspDeployArgsSchema.safeParse(args);
-                if (!parsed.success) {
-                    throw new Error(`Invalid args: ${parsed.error}`);
+                case "clasp_deploy": {
+                    const parsed = tools.ClaspDeployArgsSchema.safeParse(args);
+                    if (!parsed.success) {
+                        throw new Error(
+                            `Invalid args: ${
+                                JSON.stringify(parsed.error.format())
+                            }`,
+                        );
+                    }
+                    const result = await tools.claspDeploy(parsed.data);
+                    return {
+                        content: [{
+                            type: "text",
+                            text: result,
+                        }],
+                    };
                 }
-                const result = await tools.claspDeploy(parsed.data);
-                return {
-                    content: [{
-                        type: "text",
-                        text: result,
-                    }],
-                };
-            }
 
-            case "clasp_list": {
-                const parsed = tools.ClaspListArgsSchema.safeParse(args);
-                if (!parsed.success) {
-                    throw new Error(`Invalid args: ${parsed.error}`);
+                case "clasp_list": {
+                    const parsed = tools.ClaspListArgsSchema.safeParse(args);
+                    if (!parsed.success) {
+                        throw new Error(
+                            `Invalid args: ${
+                                JSON.stringify(parsed.error.format())
+                            }`,
+                        );
+                    }
+                    const result = await tools.claspList(parsed.data);
+                    return { content: [{ type: "text", text: result }] };
                 }
-                const result = await tools.claspList(parsed.data);
-                return { content: [{ type: "text", text: result }] };
-            }
 
-            default:
-                throw new Error(`Unknown tool: ${name}`);
+                default:
+                    throw new Error(`Unknown tool: ${name}`);
+            }
+        } catch (error) {
+            console.error(`Error executing tool ${name}:`, error);
+            return {
+                content: [{
+                    type: "text",
+                    text: formatErrorMessage(error),
+                }],
+            };
         }
     },
 );
 
 if (import.meta.main) {
-    await server.connect(new StdioServerTransport());
-    console.error("GAS Clasp MCP server running on stdio (Deno)");
+    try {
+        await server.connect(new StdioServerTransport());
+        console.error("GAS Clasp MCP server running on stdio (Deno)");
+    } catch (error) {
+        console.error("Failed to start MCP server:", error);
+        Deno.exit(1);
+    }
 }

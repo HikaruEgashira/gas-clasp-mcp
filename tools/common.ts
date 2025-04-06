@@ -1,6 +1,7 @@
 import { z } from "npm:zod@3.22.5";
 import { resolve } from "https://deno.land/std@0.224.0/path/resolve.ts";
 import { zodToJsonSchema } from "npm:zod-to-json-schema@3.22.5";
+import { CommandExecutionError, PathValidationError } from "./error.ts";
 
 export async function runCommand(cmd: string[], cwd: string): Promise<string> {
     const command = new Deno.Command(cmd[0], {
@@ -14,8 +15,11 @@ export async function runCommand(cmd: string[], cwd: string): Promise<string> {
     const errorText = new TextDecoder().decode(stderr);
 
     if (code !== 0) {
-        throw new Error(
-            `Command failed with code ${code}: ${errorText || outputText}`,
+        throw new CommandExecutionError(
+            code,
+            errorText,
+            outputText,
+            cmd.join(" "),
         );
     }
     return outputText;
@@ -23,11 +27,29 @@ export async function runCommand(cmd: string[], cwd: string): Promise<string> {
 
 export async function validatePath(path: string): Promise<string> {
     const resolvedPath = resolve(path);
-    const fileInfo = await Deno.stat(resolvedPath);
-    if (!fileInfo.isDirectory) {
-        throw new Error(`Path is not a directory: ${resolvedPath}`);
+    try {
+        const fileInfo = await Deno.stat(resolvedPath);
+        if (!fileInfo.isDirectory) {
+            throw new PathValidationError(
+                resolvedPath,
+                "Path is not a directory",
+            );
+        }
+        return resolvedPath;
+    } catch (error) {
+        if (error instanceof Deno.errors.NotFound) {
+            throw new PathValidationError(resolvedPath, "Directory not found");
+        }
+        if (error instanceof PathValidationError) {
+            throw error;
+        }
+        throw new PathValidationError(
+            resolvedPath,
+            `Unexpected error: ${
+                error instanceof Error ? error.message : String(error)
+            }`,
+        );
     }
-    return resolvedPath;
 }
 
 export async function checkClaspInstalled(): Promise<boolean> {
@@ -64,6 +86,9 @@ export async function checkGitStatus(
         return { branch, isClean };
     } catch (error) {
         console.error("Git check failed:", error);
+        if (error instanceof CommandExecutionError) {
+            throw error;
+        }
         throw new Error(
             "Failed to check git status. Is this a git repository?",
         );

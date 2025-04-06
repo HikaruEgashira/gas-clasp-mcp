@@ -9,6 +9,11 @@ import {
     runCommand,
     toToolSchema,
 } from "./common.ts";
+import {
+    ClaspInstallationError,
+    CommandExecutionError,
+    formatErrorMessage,
+} from "./error.ts";
 
 export { ClaspSetupArgsSchema };
 
@@ -40,13 +45,12 @@ export async function claspSetup(args: z.infer<typeof ClaspSetupArgsSchema>) {
             await installClasp(!!globalInstall);
             installed = true;
             output += `Clasp installed successfully.\n`;
-            // deno-lint-ignore no-explicit-any
-        } catch (e: any) {
-            output += `Clasp installation failed: ${e.message}\n`;
-            throw new Error(output);
+        } catch (error) {
+            const errorMessage = formatErrorMessage(error);
+            throw new ClaspInstallationError(errorMessage);
         }
     } else if (!installed) {
-        throw new Error(
+        throw new ClaspInstallationError(
             "Clasp is not installed. Run again with autoInstall: true or install manually.",
         );
     }
@@ -60,10 +64,15 @@ export async function claspSetup(args: z.infer<typeof ClaspSetupArgsSchema>) {
             );
             output +=
                 `Login command executed. Check terminal/browser if interaction needed.\n`;
-            // deno-lint-ignore no-explicit-any
-        } catch (e: any) {
-            output +=
-                `Login command failed: ${e.message}. Manual login might be required ('clasp login').\n`;
+        } catch (error) {
+            if (error instanceof CommandExecutionError) {
+                output +=
+                    `Login command failed: ${error.message}. Manual login might be required ('clasp login').\n`;
+            } else {
+                output += `Login failed: ${
+                    formatErrorMessage(error)
+                }. Manual login might be required ('clasp login').\n`;
+            }
         }
     }
 
@@ -75,9 +84,14 @@ export async function claspSetup(args: z.infer<typeof ClaspSetupArgsSchema>) {
                 validRootDir,
             );
             output += projects;
-            // deno-lint-ignore no-explicit-any
-        } catch (e: any) {
-            output += `Failed to list projects: ${e.message}\n`;
+        } catch (error) {
+            if (error instanceof CommandExecutionError) {
+                output += `Failed to list projects: ${error.message}\n`;
+            } else {
+                output += `Failed to list projects: ${
+                    formatErrorMessage(error)
+                }\n`;
+            }
         }
     }
 
