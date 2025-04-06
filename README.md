@@ -10,18 +10,22 @@ Add to your MCP settings:
 {
   "mcpServers": {
     "gas-clasp": {
-      "command": "deno",
-      "args": ["run", "--allow-read", "--allow-run", "--allow-env", "--allow-net", "/path/to/gas-clasp-mcp/mcp.ts"],
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "ghcr.io/hikaruegashira/gas-clasp-mcp:latest"
+      ],
       "env": {},
       "disabled": false,
-      "alwaysAllow": []
-    }
+      "alwaysAllow": [],
+      "autoApprove": []
+    },
   }
 }
 ```
-*Replace `/path/to/gas-clasp-mcp/mcp.ts` with the actual absolute path.*
 
-## Installation and Running
+## Setup Development Environment
 
 1.  **Install Deno**: Follow the instructions at [https://deno.land/](https://deno.land/)
 2.  **Cache Dependencies**:
@@ -32,14 +36,20 @@ Add to your MCP settings:
     ```bash
     deno run --allow-read --allow-run --allow-env --allow-net mcp.ts
     ```
-4.  **Run with Task Runner**:
-    ```bash
-    deno task start
-    ```
-5.  **Run in Watch Mode (Development)**:
-    ```bash
-    deno task dev
-    ```
+
+## Build with Docker
+
+```bash
+docker login ghcr.io
+
+docker buildx build --load -t gas-clasp-mcp .
+docker tag gas-clasp-mcp ghcr.io/hikaruegashira/gas-clasp-mcp:latest
+IMAGE_ID=$(docker inspect --format='{{.Id}}' gas-clasp-mcp | cut -d':' -f2 | head -c 12)
+docker tag gas-clasp-mcp ghcr.io/hikaruegashira/gas-clasp-mcp:sha-$IMAGE_ID
+
+docker push ghcr.io/hikaruegashira/gas-clasp-mcp:latest
+docker push ghcr.io/hikaruegashira/gas-clasp-mcp:sha-$IMAGE_ID
+```
 
 ## Tools
 
@@ -110,29 +120,3 @@ Deployments can target specific environments:
     ```json
     { "rootDir": "Project root directory (used for context)" }
     ```
-
-### Usage Example
-
-```javascript
-// Deploy to development environment
-use_mcp_tool({
-  server_name: "gas-clasp", // Use the name defined in MCP settings
-  tool_name: "clasp_deploy",
-  arguments: {
-    "rootDir": "/Users/username/projects/my-gas-project",
-    "env": "development",
-    "description": "Development deployment"
-  }
-});
-
-// Deploy to production (requires main branch, clean state)
-use_mcp_tool({
-  server_name: "gas-clasp",
-  tool_name: "clasp_deploy",
-  arguments: {
-    "rootDir": "/Users/username/projects/my-gas-project",
-    "env": "production",
-    "description": "Production release v1.0.0"
-  }
-});
-```

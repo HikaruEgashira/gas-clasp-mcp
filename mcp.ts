@@ -7,7 +7,10 @@ import {
     ListResourcesRequestSchema,
     ListToolsRequestSchema,
 } from "npm:@modelcontextprotocol/sdk@1.5.0/types.js";
-import type { Tool } from "npm:@modelcontextprotocol/sdk@1.5.0/types.js";
+import type {
+    CallToolRequest,
+    Tool,
+} from "npm:@modelcontextprotocol/sdk@1.5.0/types.js";
 import { zodToJsonSchema } from "npm:zod-to-json-schema@3.22.5";
 import z from "npm:zod@3.22.5";
 import { ensureDir } from "https://deno.land/std@0.224.0/fs/ensure_dir.ts";
@@ -152,26 +155,9 @@ async function runCommand(cmd: string[], cwd: string): Promise<string> {
 
 async function validatePath(path: string): Promise<string> {
     const resolvedPath = resolve(path);
-    try {
-        const fileInfo = await Deno.stat(resolvedPath);
-        if (!fileInfo.isDirectory) {
-            throw new Error(`Path is not a directory: ${resolvedPath}`);
-        }
-    } catch (error) {
-        if (error instanceof Deno.errors.NotFound) {
-            await ensureDir(dirname(resolvedPath));
-            if (
-                !["clasp_create", "clasp_clone", "clasp_setup"].includes(
-                    currentToolName,
-                )
-            ) {
-                throw new Error(
-                    `Directory or .clasp.json not found: ${resolvedPath}`,
-                );
-            }
-        } else {
-            throw error;
-        }
+    const fileInfo = await Deno.stat(resolvedPath);
+    if (!fileInfo.isDirectory) {
+        throw new Error(`Path is not a directory: ${resolvedPath}`);
     }
     return resolvedPath;
 }
@@ -235,14 +221,13 @@ server.setRequestHandler(ListResourcesRequestSchema, () => ({
 
 server.setRequestHandler(ListToolsRequestSchema, () => ({ tools: TOOLS }));
 
-let currentToolName = "";
+server.setRequestHandler(
+    CallToolRequestSchema,
+    async (request: CallToolRequest) => {
+        const name = request.params.name;
+        const args = request.params.arguments ?? {};
 
-server.setRequestHandler(CallToolRequestSchema, async (req) => {
-    const { toolName, args } = req;
-    currentToolName = toolName;
-
-    try {
-        switch (toolName) {
+        switch (name) {
             case "clasp_setup": {
                 const parsed = ClaspSetupArgsSchema.safeParse(args);
                 if (!parsed.success) {
@@ -323,7 +308,9 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
                 if (!parsed.success) {
                     throw new Error(`Invalid args: ${parsed.error}`);
                 }
-                const validRootDir = await validatePath(parsed.data.rootDir);
+                const validRootDir = await validatePath(
+                    parsed.data.rootDir,
+                );
                 const result = await runCommand(
                     ["clasp", "logout"],
                     validRootDir,
@@ -378,7 +365,9 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
                 if (!parsed.success) {
                     throw new Error(`Invalid args: ${parsed.error}`);
                 }
-                const validRootDir = await validatePath(parsed.data.rootDir);
+                const validRootDir = await validatePath(
+                    parsed.data.rootDir,
+                );
                 const cmd = ["clasp", "pull"];
 
                 const result = await runCommand(cmd, validRootDir);
@@ -390,7 +379,9 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
                 if (!parsed.success) {
                     throw new Error(`Invalid args: ${parsed.error}`);
                 }
-                const validRootDir = await validatePath(parsed.data.rootDir);
+                const validRootDir = await validatePath(
+                    parsed.data.rootDir,
+                );
                 const cmd = ["clasp", "push"];
                 if (parsed.data.force) cmd.push("--force");
                 if (parsed.data.watch) cmd.push("--watch");
@@ -446,19 +437,10 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
             }
 
             default:
-                throw new Error(`Unknown tool: ${toolName}`);
+                throw new Error(`Unknown tool: ${name}`);
         }
-        // deno-lint-ignore no-explicit-any
-    } catch (error: any) {
-        console.error(`Error calling tool ${toolName}:`, error);
-
-        return {
-            content: [{ type: "text", text: `Error: ${error.message}` }],
-        };
-    } finally {
-        currentToolName = "";
-    }
-});
+    },
+);
 
 if (import.meta.main) {
     await server.connect(new StdioServerTransport());
