@@ -27,6 +27,30 @@ Add to your MCP settings:
 }
 ```
 
+or
+
+```json
+{
+  "mcpServers": {
+    "gas-clasp": {
+      "command": "deno",
+      "args": [
+        "run",
+        "--allow-read=.",
+        "--allow-run",
+        "--allow-env",
+        "--allow-net",
+        "https://raw.githubusercontent.com/HikaruEgashira/gas-clasp-mcp/refs/heads/main/mcp.ts"
+      ],
+      "env": {},
+      "disabled": false,
+      "alwaysAllow": [],
+      "autoApprove": []
+    }
+  }
+}
+```
+
 ## Setup Development Environment
 
 1.  **Install Deno**: Follow the instructions at [https://deno.land/](https://deno.land/)
