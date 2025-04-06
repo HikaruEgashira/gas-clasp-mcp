@@ -14,13 +14,15 @@ Add to your MCP settings:
       "args": [
         "run",
         "-i",
+        "-v", ".:/workspace",
+        "-w", "/workspace",
         "ghcr.io/hikaruegashira/gas-clasp-mcp:latest"
       ],
       "env": {},
       "disabled": false,
       "alwaysAllow": [],
       "autoApprove": []
-    },
+    }
   }
 }
 ```
