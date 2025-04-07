@@ -14,7 +14,7 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: '自然な日本語で操作',
-    imgSrc: 'img/3.png',
+    imgSrc: 'img/1.png',
     imgAlt: '自然な日本語で会話する女性のイラスト',
     description: (
       <>
@@ -24,7 +24,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'Google Apps Scriptを簡単管理',
-    imgSrc: 'img/1.png',
+    imgSrc: 'img/2.png',
     imgAlt: 'Google Apps Scriptのアイコン風イラスト',
     description: (
       <>
@@ -34,7 +34,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: '自動化・効率化',
-    imgSrc: 'img/2.png',
+    imgSrc: 'img/3.png',
     imgAlt: '自動化・効率化を象徴する歯車のイラスト',
     description: (
       <>
