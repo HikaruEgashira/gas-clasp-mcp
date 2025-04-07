@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "gas-clasp": {
+      "command": "deno",
+      "args": [
+        "run",
+        "-A",
+        "../mcp.ts"
+      ],
+      "env": {},
+      "disabled": false,
+      "alwaysAllow": [],
+      "autoApprove": []
+    }
+  }
+}
