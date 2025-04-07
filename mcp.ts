@@ -20,9 +20,8 @@ export const TOOLS: Tool[] = [
     tools.CLASP_CREATE_TOOL,
     tools.CLASP_CLONE_TOOL,
     tools.CLASP_PULL_TOOL,
-    tools.CLASP_PUSH_TOOL,
-    tools.CLASP_DEPLOY_TOOL,
     tools.CLASP_LIST_TOOL,
+    tools.CLASP_PUSH_AND_DEPLOY_TOOL,
 ];
 
 const server = new Server(
@@ -127,37 +126,6 @@ server.setRequestHandler(
                     return { content: [{ type: "text", text: result }] };
                 }
 
-                case "clasp_push": {
-                    const parsed = tools.ClaspPushArgsSchema.safeParse(args);
-                    if (!parsed.success) {
-                        throw new Error(
-                            `Invalid args: ${
-                                JSON.stringify(parsed.error.format())
-                            }`,
-                        );
-                    }
-                    const result = await tools.claspPush(parsed.data);
-                    return { content: [{ type: "text", text: result }] };
-                }
-
-                case "clasp_deploy": {
-                    const parsed = tools.ClaspDeployArgsSchema.safeParse(args);
-                    if (!parsed.success) {
-                        throw new Error(
-                            `Invalid args: ${
-                                JSON.stringify(parsed.error.format())
-                            }`,
-                        );
-                    }
-                    const result = await tools.claspDeploy(parsed.data);
-                    return {
-                        content: [{
-                            type: "text",
-                            text: result,
-                        }],
-                    };
-                }
-
                 case "clasp_list": {
                     const parsed = tools.ClaspListArgsSchema.safeParse(args);
                     if (!parsed.success) {
@@ -168,6 +136,21 @@ server.setRequestHandler(
                         );
                     }
                     const result = await tools.claspList(parsed.data);
+                    return { content: [{ type: "text", text: result }] };
+                }
+
+                case "clasp_push_and_deploy": {
+                    const parsed = tools.ClaspPushAndDeployArgsSchema.safeParse(
+                        args,
+                    );
+                    if (!parsed.success) {
+                        throw new Error(
+                            `Invalid args: ${
+                                JSON.stringify(parsed.error.format())
+                            }`,
+                        );
+                    }
+                    const result = await tools.claspPushAndDeploy(parsed.data);
                     return { content: [{ type: "text", text: result }] };
                 }
 

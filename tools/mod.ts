@@ -24,17 +24,12 @@ export {
     ClaspPullArgsSchema,
 } from "./clasp_pull.ts";
 export {
-    CLASP_PUSH_TOOL,
-    claspPush,
-    ClaspPushArgsSchema,
-} from "./clasp_push.ts";
-export {
-    CLASP_DEPLOY_TOOL,
-    claspDeploy,
-    ClaspDeployArgsSchema,
-} from "./clasp_deploy.ts";
-export {
     CLASP_LIST_TOOL,
     claspList,
     ClaspListArgsSchema,
 } from "./clasp_list.ts";
+export {
+    CLASP_PUSH_AND_DEPLOY_TOOL,
+    claspPushAndDeploy,
+    ClaspPushAndDeployArgsSchema,
+} from "./clasp_push_and_deploy.ts";

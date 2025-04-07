@@ -51,32 +51,6 @@ or
 }
 ```
 
-## Setup Development Environment
-
-1.  **Install Deno**: Follow the instructions at [https://deno.land/](https://deno.land/)
-2.  **Cache Dependencies**:
-    ```bash
-    deno cache mcp.ts
-    ```
-3.  **Run Directly**:
-    ```bash
-    deno run --allow-read --allow-run --allow-env --allow-net mcp.ts
-    ```
-
-## Build with Docker
-
-```bash
-docker login ghcr.io
-
-docker buildx build --load -t gas-clasp-mcp .
-docker tag gas-clasp-mcp ghcr.io/hikaruegashira/gas-clasp-mcp:latest
-IMAGE_ID=$(docker inspect --format='{{.Id}}' gas-clasp-mcp | cut -d':' -f2 | head -c 12)
-docker tag gas-clasp-mcp ghcr.io/hikaruegashira/gas-clasp-mcp:sha-$IMAGE_ID
-
-docker push ghcr.io/hikaruegashira/gas-clasp-mcp:latest
-docker push ghcr.io/hikaruegashira/gas-clasp-mcp:sha-$IMAGE_ID
-```
-
 ## Tools
 
 This MCP server provides tools to interact with the Google Apps Script command-line tool [clasp](https://github.com/google/clasp).
@@ -121,28 +95,52 @@ Deployments can target specific environments:
       "rootDir": "Directory to clone into"
     }
     ```
-5.  **clasp_pull**: Pulls remote changes to the local project.
-    ```json
-    { "rootDir": "Project root directory" }
-    ```
-6.  **clasp_push**: Pushes local changes to the remote project.
+5.  **clasp_pull**: Pulls remote changes to the local project. Automatically switches `.clasp.json` based on the specified environment.
     ```json
     {
       "rootDir": "Project root directory",
-      "force": "Ignore confirmation prompts (optional: true/false)",
-      "watch": "Watch for changes and auto-push (optional: true/false, not recommended for MCP)"
+      "env": "Environment (development or production)"
     }
     ```
-7.  **clasp_deploy**: Deploys the project.
+6.  **clasp_push_and_deploy**: Pushes local changes and optionally deploys. Automatically switches `.clasp.json` based on the specified environment.
     ```json
     {
       "rootDir": "Project root directory",
-      "env": "Environment (development/staging/production)",
+      "env": "Environment (development or production)",
+      "force": "Ignore confirmation prompts (optional: true/false)",
+      "watch": "Watch for changes and auto-push (optional: true/false)",
+      "deploy": "Deploy after push (optional: true/false)",
       "version": "Deployment version (optional)",
       "description": "Deployment description (optional)"
     }
     ```
-8.  **clasp_list**: Lists Google Apps Script projects associated with the account.
+7.  **clasp_list**: Lists Google Apps Script projects associated with the account.
     ```json
     { "rootDir": "Project root directory (used for context)" }
     ```
+
+## Setup Development Environment
+
+1.  **Install Deno**: Follow the instructions at [https://deno.land/](https://deno.land/)
+2.  **Cache Dependencies**:
+    ```bash
+    deno cache mcp.ts
+    ```
+3.  **Run Directly**:
+    ```bash
+    deno run --allow-read --allow-run --allow-env --allow-net mcp.ts
+    ```
+
+## Build with Docker
+
+```bash
+docker login ghcr.io
+
+docker buildx build --load -t gas-clasp-mcp .
+docker tag gas-clasp-mcp ghcr.io/hikaruegashira/gas-clasp-mcp:latest
+IMAGE_ID=$(docker inspect --format='{{.Id}}' gas-clasp-mcp | cut -d':' -f2 | head -c 12)
+docker tag gas-clasp-mcp ghcr.io/hikaruegashira/gas-clasp-mcp:sha-$IMAGE_ID
+
+docker push ghcr.io/hikaruegashira/gas-clasp-mcp:latest
+docker push ghcr.io/hikaruegashira/gas-clasp-mcp:sha-$IMAGE_ID
+```
