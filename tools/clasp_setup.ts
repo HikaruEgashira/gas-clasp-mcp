@@ -20,7 +20,7 @@ export { ClaspSetupArgsSchema };
 export const CLASP_SETUP_TOOL: Tool = {
     name: "clasp_setup",
     description:
-        "Sets up the clasp environment. Checks installation, optionally installs clasp, and optionally logs into Google.",
+        "Sets up the clasp environment. Checks installation, optionally installs clasp, and optionally logs into Google. In headless or Docker environments, browser login may not work; instead, perform 'clasp login' on host and mount the resulting .clasprc.json into the container.",
     inputSchema: toToolSchema(ClaspSetupArgsSchema),
 };
 

@@ -16,13 +16,14 @@ Add to your MCP settings:
 {
   "mcpServers": {
     "gas-clasp": {
-      "command": "docker",
+      "command": "deno",
       "args": [
         "run",
-        "-i",
-        "-v", ".:/workspace",
-        "-w", "/workspace",
-        "ghcr.io/hikaruegashira/gas-clasp-mcp:latest"
+        "--allow-read=.",
+        "--allow-run",
+        "--allow-env",
+        "--allow-net",
+        "https://raw.githubusercontent.com/HikaruEgashira/gas-clasp-mcp/refs/heads/main/mcp.ts"
       ],
       "env": {},
       "disabled": false,
@@ -39,14 +40,14 @@ or
 {
   "mcpServers": {
     "gas-clasp": {
-      "command": "deno",
+      "command": "docker",
       "args": [
         "run",
-        "--allow-read=.",
-        "--allow-run",
-        "--allow-env",
-        "--allow-net",
-        "https://raw.githubusercontent.com/HikaruEgashira/gas-clasp-mcp/refs/heads/main/mcp.ts"
+        "-i",
+        "-v", ".:/workspace",
+        "-w", "/workspace",
+        "-v", "~/.clasprc.json:/root/.clasprc.json",
+        "ghcr.io/hikaruegashira/gas-clasp-mcp:latest"
       ],
       "env": {},
       "disabled": false,

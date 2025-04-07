@@ -5,7 +5,7 @@ ENV PATH="/deno:$PATH"
 ENV DENO_DIR="/app/.cache/deno"
 
 RUN dnf update -y && \
-    dnf install -y --allowerasing curl unzip git && \
+    dnf install -y --allowerasing curl unzip git nodejs && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
@@ -14,6 +14,8 @@ RUN curl -fsSL https://github.com/denoland/deno/releases/download/v${DENO_VERSIO
     unzip deno.zip -d /deno && \
     chmod 755 /deno/deno && \
     rm deno.zip
+
+RUN npm install -g @google/clasp
 
 WORKDIR /app
 
