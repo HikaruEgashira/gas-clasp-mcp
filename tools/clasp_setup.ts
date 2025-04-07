@@ -59,7 +59,7 @@ export async function claspSetup(args: z.infer<typeof ClaspSetupArgsSchema>) {
         output += `Attempting Google login (follow browser prompts)...\n`;
         try {
             await runCommand(
-                ["clasp", "login", "--no-localhost"],
+                ["clasp", "login"],
                 validRootDir,
             );
             output +=
