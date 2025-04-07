@@ -1,6 +1,12 @@
-# GAS Clasp MCP (Deno Version)
+<div align="center">
 
-Model Context Protocol (MCP) server for Google Clasp integration, running on Deno.
+<img src="website/static/img/logo.png" alt="Logo" width="200"/>
+
+# GAS Clasp MCP
+
+Model Context Protocol (MCP) server for Google Clasp integration.
+
+</div>
 
 ## Configuration
 

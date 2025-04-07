@@ -7,7 +7,7 @@ import type * as Preset from "@docusaurus/preset-classic";
 const config: Config = {
   title: "gas-clasp-mcp",
   tagline: "Google Apps Script × clasp × MCP で自動化をもっと簡単に",
-  favicon: "img/favicon.ico",
+  favicon: "img/logo.png",
 
   // Set the production url of your site here
   url: "https://HikaruEgashira.github.io",
