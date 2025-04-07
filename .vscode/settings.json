@@ -1,5 +1,8 @@
 {
-    "deno.enable": true,
+    "deno.enablePaths": [
+        "./mcp.ts",
+        "./tools"
+    ],
     "deno.lint": true,
     "[typescript]": {
         "editor.defaultFormatter": "denoland.vscode-deno"
