@@ -139,6 +139,9 @@ export const ClaspCloneArgsSchema = RootDirSchema.extend({
 });
 
 export const ClaspPullArgsSchema = RootDirSchema.extend({
+    env: z.enum(["development", "production"]).describe(
+        "Target environment for pull",
+    ),
     scriptId: z.string().optional().describe(
         "Script ID to pull from (optional, uses .clasp.json if omitted)",
     ),

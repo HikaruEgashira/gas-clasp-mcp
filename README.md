@@ -59,8 +59,7 @@ This MCP server provides tools to interact with the Google Apps Script command-l
 
 Deployments can target specific environments:
 
--   `development`: Development environment (default)
--   `staging`: Staging/testing environment
+-   `development`: Development environment
 -   `production`: Production environment
     -   **Important**: Production deployments require being on the `main` git branch with no uncommitted changes.
 
