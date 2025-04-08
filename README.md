@@ -23,7 +23,7 @@ Add to your MCP settings:
         "--allow-run",
         "--allow-env",
         "--allow-net",
-        "https://raw.githubusercontent.com/HikaruEgashira/gas-clasp-mcp/refs/heads/main/mcp.ts"
+        "jsr:@hikae/gas-clasp-mcp/mcp.ts"
       ],
       "env": {},
       "disabled": false,
