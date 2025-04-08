@@ -1,5 +1,5 @@
 import { z } from "npm:zod@3.22.5";
-import { resolve } from "https://deno.land/std@0.224.0/path/resolve.ts";
+import { resolve } from "jsr:@std/path@1/resolve";
 import { zodToJsonSchema } from "npm:zod-to-json-schema@3.22.5";
 import { CommandExecutionError, PathValidationError } from "./error.ts";
 

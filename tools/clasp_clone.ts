@@ -1,7 +1,7 @@
 import { z } from "npm:zod@3.22.5";
-import { resolve } from "https://deno.land/std@0.224.0/path/resolve.ts";
-import { ensureDir } from "https://deno.land/std@0.224.0/fs/ensure_dir.ts";
-import { dirname } from "https://deno.land/std@0.224.0/path/dirname.ts";
+import { resolve } from "jsr:@std/path@1/resolve";
+import { ensureDir } from "jsr:@std/fs@1/ensure-dir";
+import { dirname } from "jsr:@std/path@1/dirname";
 import { Tool } from "npm:@modelcontextprotocol/sdk@1.5.0/types.js";
 import { ClaspCloneArgsSchema, runCommand, toToolSchema } from "./common.ts";
 

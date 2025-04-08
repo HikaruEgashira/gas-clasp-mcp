@@ -1,0 +1,14 @@
+{
+    "name": "@hikae/gas-clasp-mcp",
+    "version": "0.1.0",
+    "description": "Google Apps Script clasp automation MCP server for Deno",
+    "exports": {
+        "./mcp.ts": "./mcp.ts"
+    },
+    "files": [
+        "mcp.ts",
+        "tools/"
+    ],
+    "repository": "https://github.com/HikaruEgashira/gas-clasp-mcp",
+    "license": "MIT"
+}
