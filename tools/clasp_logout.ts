@@ -16,9 +16,12 @@ export const CLASP_LOGOUT_TOOL: Tool = {
     inputSchema: toToolSchema(ClaspLogoutArgsSchema),
 };
 
-export async function claspLogout(args: z.infer<typeof ClaspLogoutArgsSchema>) {
+export async function claspLogout(
+    args: z.infer<typeof ClaspLogoutArgsSchema>,
+    runCmd: typeof runCommand = runCommand,
+) {
     const validRootDir = await validatePath(args.rootDir);
-    const result = await runCommand(
+    const result = await runCmd(
         ["clasp", "logout"],
         validRootDir,
     );
