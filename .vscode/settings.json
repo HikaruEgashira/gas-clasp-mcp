@@ -1,7 +1,8 @@
 {
     "deno.enablePaths": [
         "./mcp.ts",
-        "./tools"
+        "./tools",
+        "./tests"
     ],
     "deno.lint": true,
     "[typescript]": {
