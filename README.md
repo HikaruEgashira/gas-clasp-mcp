@@ -25,34 +25,9 @@ Model Context Protocol (MCP) server for Google Clasp integration.
         "--allow-run",
         "--allow-env",
         "--allow-net",
-        "jsr:@hikae/gas-clasp-mcp/mcp.ts"
-      ],
-      "env": {},
-      "disabled": false,
-      "alwaysAllow": [],
-      "autoApprove": []
-    }
-  }
-}
-```
-
-or
-
-```json
-{
-  "mcpServers": {
-    "gas-clasp": {
-      "command": "docker",
-      "args": [
-        "run",
-        "-i",
-        "-v",
-        ".:/workspace",
-        "-w",
-        "/workspace",
-        "-v",
-        "~/.clasprc.json:/root/.clasprc.json",
-        "ghcr.io/hikaruegashira/gas-clasp-mcp:latest"
+        "jsr:@hikae/gas-clasp-mcp/mcp.ts",
+        "--rootdir",
+        "/Users/xxx/workspace"
       ],
       "env": {},
       "disabled": false,
@@ -146,7 +121,7 @@ Deployments can target specific environments:
    ```
 3. **Run Directly**:
    ```bash
-   deno run --allow-read --allow-run --allow-env --allow-net mcp.ts
+   deno run --allow-read --allow-run --allow-env --allow-net mcp.ts --rootdir /path/to/project
    ```
 
 ## Build with Docker

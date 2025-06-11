@@ -24,6 +24,22 @@ export const TOOLS: Tool[] = [
   tools.CLASP_PUSH_AND_DEPLOY_TOOL,
 ];
 
+function parseArgs() {
+  const args = Deno.args;
+  let rootDir = Deno.cwd();
+
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === "--rootdir" && i + 1 < args.length) {
+      rootDir = args[i + 1];
+      break;
+    }
+  }
+
+  return { rootDir };
+}
+
+const { rootDir } = parseArgs();
+
 const server = new Server(
   {
     name: "gas-clasp-mcp",
@@ -52,7 +68,10 @@ server.setRequestHandler(
     try {
       switch (name) {
         case "clasp_setup": {
-          const parsed = tools.ClaspSetupArgsSchema.safeParse(args);
+          const parsed = tools.ClaspSetupArgsSchema.safeParse({
+            rootDir,
+            ...args,
+          });
           if (!parsed.success) {
             throw new Error(
               `Invalid args: ${JSON.stringify(parsed.error.format())}`,
@@ -65,7 +84,10 @@ server.setRequestHandler(
         }
 
         case "clasp_logout": {
-          const parsed = tools.ClaspLogoutArgsSchema.safeParse(args);
+          const parsed = tools.ClaspLogoutArgsSchema.safeParse({
+            rootDir,
+            ...args,
+          });
           if (!parsed.success) {
             throw new Error(
               `Invalid args: ${JSON.stringify(parsed.error.format())}`,
@@ -76,7 +98,10 @@ server.setRequestHandler(
         }
 
         case "clasp_create": {
-          const parsed = tools.ClaspCreateArgsSchema.safeParse(args);
+          const parsed = tools.ClaspCreateArgsSchema.safeParse({
+            rootDir,
+            ...args,
+          });
           if (!parsed.success) {
             throw new Error(
               `Invalid args: ${JSON.stringify(parsed.error.format())}`,
@@ -87,7 +112,10 @@ server.setRequestHandler(
         }
 
         case "clasp_clone": {
-          const parsed = tools.ClaspCloneArgsSchema.safeParse(args);
+          const parsed = tools.ClaspCloneArgsSchema.safeParse({
+            rootDir,
+            ...args,
+          });
           if (!parsed.success) {
             throw new Error(
               `Invalid args: ${JSON.stringify(parsed.error.format())}`,
@@ -98,7 +126,10 @@ server.setRequestHandler(
         }
 
         case "clasp_pull": {
-          const parsed = tools.ClaspPullArgsSchema.safeParse(args);
+          const parsed = tools.ClaspPullArgsSchema.safeParse({
+            rootDir,
+            ...args,
+          });
           if (!parsed.success) {
             throw new Error(
               `Invalid args: ${JSON.stringify(parsed.error.format())}`,
@@ -109,7 +140,10 @@ server.setRequestHandler(
         }
 
         case "clasp_list": {
-          const parsed = tools.ClaspListArgsSchema.safeParse(args);
+          const parsed = tools.ClaspListArgsSchema.safeParse({
+            rootDir,
+            ...args,
+          });
           if (!parsed.success) {
             throw new Error(
               `Invalid args: ${JSON.stringify(parsed.error.format())}`,
@@ -120,9 +154,10 @@ server.setRequestHandler(
         }
 
         case "clasp_push_and_deploy": {
-          const parsed = tools.ClaspPushAndDeployArgsSchema.safeParse(
-            args,
-          );
+          const parsed = tools.ClaspPushAndDeployArgsSchema.safeParse({
+            rootDir,
+            ...args,
+          });
           if (!parsed.success) {
             throw new Error(
               `Invalid args: ${JSON.stringify(parsed.error.format())}`,
