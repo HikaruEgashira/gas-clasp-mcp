@@ -10,7 +10,9 @@ Model Context Protocol (MCP) server for Google Clasp integration.
 
 ## Configuration
 
-Add to your MCP settings:
+1. Install deno https://docs.deno.com/runtime/getting_started/installation/
+
+2. Add to your MCP settings:
 
 ```json
 {
@@ -44,9 +46,12 @@ or
       "args": [
         "run",
         "-i",
-        "-v", ".:/workspace",
-        "-w", "/workspace",
-        "-v", "~/.clasprc.json:/root/.clasprc.json",
+        "-v",
+        ".:/workspace",
+        "-w",
+        "/workspace",
+        "-v",
+        "~/.clasprc.json:/root/.clasprc.json",
         "ghcr.io/hikaruegashira/gas-clasp-mcp:latest"
       ],
       "env": {},
@@ -60,82 +65,89 @@ or
 
 ## Tools
 
-This MCP server provides tools to interact with the Google Apps Script command-line tool [clasp](https://github.com/google/clasp).
+This MCP server provides tools to interact with the Google Apps Script
+command-line tool [clasp](https://github.com/google/clasp).
 
 ### Environment Configuration (env)
 
 Deployments can target specific environments:
 
--   `development`: Development environment
--   `production`: Production environment
-    -   **Important**: Production deployments require being on the `main` git branch with no uncommitted changes.
+- `development`: Development environment
+- `production`: Production environment
+  - **Important**: Production deployments require being on the `main` git branch
+    with no uncommitted changes.
 
 ### Available Tools
 
-1.  **clasp_setup**: Sets up the clasp environment (checks/installs clasp, optional login).
-    ```json
-    {
-      "rootDir": "Project root directory",
-      "autoInstall": "Install clasp if missing (optional: true/false)",
-      "autoLogin": "Initiate Google login (optional: true/false)",
-      "global": "Install clasp globally (optional: true/false)",
-      "listProjects": "List projects after setup (optional: true/false)"
-    }
-    ```
-2.  **clasp_logout**: Logs out from the current Google account via clasp.
-    ```json
-    { "rootDir": "Project root directory" }
-    ```
-3.  **clasp_create**: Creates a new Google Apps Script project.
-    ```json
-    {
-      "title": "Project title",
-      "rootDir": "Directory to create project in",
-      "type": "Project type (optional: standalone/docs/sheets/slides/forms/webapp/api)"
-    }
-    ```
-4.  **clasp_clone**: Clones an existing Google Apps Script project.
-    ```json
-    {
-      "scriptId": "Script ID to clone",
-      "rootDir": "Directory to clone into"
-    }
-    ```
-5.  **clasp_pull**: Pulls remote changes to the local project. Automatically switches `.clasp.json` based on the specified environment.
-    ```json
-    {
-      "rootDir": "Project root directory",
-      "env": "Environment (development or production)"
-    }
-    ```
-6.  **clasp_push_and_deploy**: Pushes local changes and optionally deploys. Automatically switches `.clasp.json` based on the specified environment.
-    ```json
-    {
-      "rootDir": "Project root directory",
-      "env": "Environment (development or production)",
-      "force": "Ignore confirmation prompts (optional: true/false)",
-      "watch": "Watch for changes and auto-push (optional: true/false)",
-      "deploy": "Deploy after push (optional: true/false)",
-      "version": "Deployment version (optional)",
-      "description": "Deployment description (optional)"
-    }
-    ```
-7.  **clasp_list**: Lists Google Apps Script projects associated with the account.
-    ```json
-    { "rootDir": "Project root directory (used for context)" }
-    ```
+1. **clasp_setup**: Sets up the clasp environment (checks/installs clasp,
+   optional login).
+   ```json
+   {
+     "rootDir": "Project root directory",
+     "autoInstall": "Install clasp if missing (optional: true/false)",
+     "autoLogin": "Initiate Google login (optional: true/false)",
+     "global": "Install clasp globally (optional: true/false)",
+     "listProjects": "List projects after setup (optional: true/false)"
+   }
+   ```
+2. **clasp_logout**: Logs out from the current Google account via clasp.
+   ```json
+   { "rootDir": "Project root directory" }
+   ```
+3. **clasp_create**: Creates a new Google Apps Script project.
+   ```json
+   {
+     "title": "Project title",
+     "rootDir": "Directory to create project in",
+     "type": "Project type (optional: standalone/docs/sheets/slides/forms/webapp/api)"
+   }
+   ```
+4. **clasp_clone**: Clones an existing Google Apps Script project.
+   ```json
+   {
+     "scriptId": "Script ID to clone",
+     "rootDir": "Directory to clone into"
+   }
+   ```
+5. **clasp_pull**: Pulls remote changes to the local project. Automatically
+   switches `.clasp.json` based on the specified environment.
+   ```json
+   {
+     "rootDir": "Project root directory",
+     "env": "Environment (development or production)"
+   }
+   ```
+6. **clasp_push_and_deploy**: Pushes local changes and optionally deploys.
+   Automatically switches `.clasp.json` based on the specified environment.
+   ```json
+   {
+     "rootDir": "Project root directory",
+     "env": "Environment (development or production)",
+     "force": "Ignore confirmation prompts (optional: true/false)",
+     "watch": "Watch for changes and auto-push (optional: true/false)",
+     "deploy": "Deploy after push (optional: true/false)",
+     "version": "Deployment version (optional)",
+     "description": "Deployment description (optional)"
+   }
+   ```
+7. **clasp_list**: Lists Google Apps Script projects associated with the
+   account.
+   ```json
+   { "rootDir": "Project root directory (used for context)" }
+   ```
 
 ## Setup Development Environment
 
-1.  **Install Deno**: Follow the instructions at [https://deno.land/](https://deno.land/)
-2.  **Cache Dependencies**:
-    ```bash
-    deno cache mcp.ts
-    ```
-3.  **Run Directly**:
-    ```bash
-    deno run --allow-read --allow-run --allow-env --allow-net mcp.ts
-    ```
+1. **Install Deno**: Follow the instructions at
+   [https://deno.land/](https://deno.land/)
+2. **Cache Dependencies**:
+   ```bash
+   deno cache mcp.ts
+   ```
+3. **Run Directly**:
+   ```bash
+   deno run --allow-read --allow-run --allow-env --allow-net mcp.ts
+   ```
 
 ## Build with Docker
 
