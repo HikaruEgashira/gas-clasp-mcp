@@ -51,11 +51,11 @@ Google Apps Scriptを管理するMCPサーバーです
 
 1. **clasp_setup**:
    clasp環境のセットアップ（claspのインストール、ログイン）を行います。
-3. **clasp_create**: 新しいGoogle Apps Scriptプロジェクトを作成します。
-4. **clasp_clone**: 既存のGoogle Apps Scriptプロジェクトをクローンします。
-5. **clasp_pull**:
+2. **clasp_create**: 新しいGoogle Apps Scriptプロジェクトを作成します。
+3. **clasp_clone**: 既存のGoogle Apps Scriptプロジェクトをクローンします。
+4. **clasp_pull**:
    リモートの変更をローカルプロジェクトに取得します。指定した環境に応じて自動的に`.clasp.json`を切り替えます。
-6. **clasp_push_and_deploy**:
+5. **clasp_push_and_deploy**:
    ローカルの変更をプッシュし、必要に応じてデプロイします。指定した環境に応じて自動的に`.clasp.json`を切り替えます。
-7. **clasp_list**: アカウントに紐づくGoogle Apps
+6. **clasp_list**: アカウントに紐づくGoogle Apps
    Scriptプロジェクトの一覧を表示します。
