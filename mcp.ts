@@ -17,7 +17,6 @@ import { setRootDir } from "./tools/common.ts";
 
 export const TOOLS: Tool[] = [
   tools.CLASP_SETUP_TOOL,
-  tools.CLASP_LOGOUT_TOOL,
   tools.CLASP_CREATE_TOOL,
   tools.CLASP_CLONE_TOOL,
   tools.CLASP_PULL_TOOL,
@@ -81,17 +80,6 @@ async function main() {
             return {
               content: [{ type: "text", text: output }],
             };
-          }
-
-          case "clasp_logout": {
-            const parsed = tools.ClaspLogoutArgsSchema.safeParse(args);
-            if (!parsed.success) {
-              throw new Error(
-                `Invalid args: ${JSON.stringify(parsed.error.format())}`,
-              );
-            }
-            const result = await tools.claspLogout(parsed.data);
-            return { content: [{ type: "text", text: result }] };
           }
 
           case "clasp_create": {

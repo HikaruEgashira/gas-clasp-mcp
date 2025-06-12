@@ -22,39 +22,3 @@ Deno.test("MCP server responds to listTools via stdio", async () => {
   await transport.close();
   await client.close();
 });
-
-Deno.test.ignore(
-  "MCP server executes clasp_logout tool via stdio",
-  async () => {
-    const transport = new StdioClientTransport({
-      command: "deno",
-      args: ["run", "-A", "mcp.ts"],
-    });
-
-    const client = new Client({
-      name: "test-client",
-      version: "0.1.0",
-    });
-
-    try {
-      await client.connect(transport);
-
-      try {
-        const response = await client.callTool({
-          name: "clasp_logout",
-          arguments: {},
-        });
-
-        assertExists(response.content, "No content in tool response");
-      } catch (error) {
-        console.log(
-          "Expected error due to clasp not being installed:",
-          error instanceof Error ? error.message : String(error),
-        );
-      }
-    } finally {
-      await client.close();
-      await transport.close();
-    }
-  },
-);

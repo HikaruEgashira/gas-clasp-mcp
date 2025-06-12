@@ -4,11 +4,6 @@ export {
     ClaspSetupArgsSchema,
 } from "./clasp_setup.ts";
 export {
-    CLASP_LOGOUT_TOOL,
-    claspLogout,
-    ClaspLogoutArgsSchema,
-} from "./clasp_logout.ts";
-export {
     CLASP_CREATE_TOOL,
     claspCreate,
     ClaspCreateArgsSchema,
