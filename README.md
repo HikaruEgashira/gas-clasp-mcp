@@ -4,15 +4,15 @@
 
 # GAS Clasp MCP
 
-Model Context Protocol (MCP) server for Google Clasp integration.
+Google Apps Scriptを管理するMCPサーバーです
 
 </div>
 
-## Configuration
+## 設定方法
 
-1. Install deno https://docs.deno.com/runtime/getting_started/installation/
-
-2. Add to your MCP settings:
+1. Denoをインストールします（https://docs.deno.com/runtime/getting_started/installation/
+   を参照）。
+2. MCPの設定ファイルに以下を追加してください：
 
 ```json
 {
@@ -38,57 +38,25 @@ Model Context Protocol (MCP) server for Google Clasp integration.
 }
 ```
 
-## Tools
+### 環境設定（env）
 
-This MCP server provides tools to interact with the Google Apps Script
-command-line tool [clasp](https://github.com/google/clasp).
+デプロイは、以下の環境を指定して実行できます：
 
-### Environment Configuration (env)
+- `development`: 開発環境
+- `production`: 本番環境
+  - **重要**:
+    本番環境へのデプロイは、`main`ブランチにpushが完了した後に実行可能になります。
 
-Deployments can target specific environments:
+## 利用可能なツール
 
-- `development`: Development environment
-- `production`: Production environment
-  - **Important**: Production deployments require being on the `main` git branch
-    with no uncommitted changes.
-
-### Available Tools
-
-1. **clasp_setup**: Sets up the clasp environment (checks/installs clasp,
-   optional login).
-2. **clasp_logout**: Logs out from the current Google account via clasp.
-3. **clasp_create**: Creates a new Google Apps Script project.
-4. **clasp_clone**: Clones an existing Google Apps Script project.
-5. **clasp_pull**: Pulls remote changes to the local project. Automatically
-   switches `.clasp.json` based on the specified environment.
-6. **clasp_push_and_deploy**: Pushes local changes and optionally deploys.
-   Automatically switches `.clasp.json` based on the specified environment.
-7. **clasp_list**: Lists Google Apps Script projects associated with the
-   account.
-
-## Setup Development Environment
-
-1. **Install Deno**: Follow the instructions at
-   [https://deno.land/](https://deno.land/)
-2. **Cache Dependencies**:
-   ```bash
-   deno cache mcp.ts
-   ```
-3. **Run Directly**:
-   ```bash
-   deno run --allow-read --allow-run --allow-env --allow-net mcp.ts --rootdir /path/to/project
-   ```
-
-## Build with Docker
-
-```bash
-docker login ghcr.io
-
-docker buildx build --load -t gas-clasp-mcp .
-docker tag gas-clasp-mcp ghcr.io/hikaruegashira/gas-clasp-mcp:latest
-IMAGE_ID=$(docker inspect --format='{{.Id}}' gas-clasp-mcp | cut -d':' -f2 | head -c 12)
-docker tag gas-clasp-mcp ghcr.io/hikaruegashira/gas-clasp-mcp:sha-$IMAGE_ID
-
-docker push ghcr.io/hikaruegashira/gas-clasp-mcp:latest
-docker push ghcr.io/hikaruegashira/gas-clasp-mcp:sha-$IMAGE_ID
-```
+1. **clasp_setup**:
+   clasp環境のセットアップ（claspのインストール、ログイン）を行います。
+2. **clasp_logout**: claspを使って現在のGoogleアカウントからログアウトします。｀
+3. **clasp_create**: 新しいGoogle Apps Scriptプロジェクトを作成します。
+4. **clasp_clone**: 既存のGoogle Apps Scriptプロジェクトをクローンします。
+5. **clasp_pull**:
+   リモートの変更をローカルプロジェクトに取得します。指定した環境に応じて自動的に`.clasp.json`を切り替えます。
+6. **clasp_push_and_deploy**:
+   ローカルの変更をプッシュし、必要に応じてデプロイします。指定した環境に応じて自動的に`.clasp.json`を切り替えます。
+7. **clasp_list**: アカウントに紐づくGoogle Apps
+   Scriptプロジェクトの一覧を表示します。
