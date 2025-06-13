@@ -13,7 +13,7 @@ import type {
 } from "npm:@modelcontextprotocol/sdk@1.5.0/types.js";
 import * as tools from "./tools/mod.ts";
 import { formatErrorMessage } from "./tools/error.ts";
-import { setRootDir } from "./tools/common.ts";
+import { setWorkspaceDir } from "./tools/common.ts";
 
 export const TOOLS: Tool[] = [
   tools.CLASP_SETUP_TOOL,
@@ -26,21 +26,24 @@ export const TOOLS: Tool[] = [
 
 function parseArgs() {
   const args = Deno.args;
-  let rootDir = Deno.cwd();
+  
+  // First check environment variable
+  let workspaceDir = Deno.env.get("WORKSPACE_DIR") || Deno.cwd();
 
+  // Command line argument takes precedence over environment variable
   for (let i = 0; i < args.length; i++) {
-    if (args[i] === "--rootdir" && i + 1 < args.length) {
-      rootDir = args[i + 1];
+    if (args[i] === "--workspacedir" && i + 1 < args.length) {
+      workspaceDir = args[i + 1];
       break;
     }
   }
 
-  return { rootDir };
+  return { workspaceDir };
 }
 
 async function main() {
-  const { rootDir } = parseArgs();
-  await setRootDir(rootDir);
+  const { workspaceDir } = parseArgs();
+  await setWorkspaceDir(workspaceDir);
 
   const server = new Server(
     {

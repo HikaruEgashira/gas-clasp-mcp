@@ -25,11 +25,11 @@ Google Apps Scriptを管理するMCPサーバーです
         "--allow-run",
         "--allow-env",
         "--allow-net",
-        "jsr:@hikae/gas-clasp-mcp/mcp.ts",
-        "--rootdir",
-        "/Users/xxx/workspace"
+        "jsr:@hikae/gas-clasp-mcp/mcp.ts"
       ],
-      "env": {},
+      "env": {
+        "WORKSPACE_DIR": "/Users/xxx/workspace"
+      },
       "disabled": false,
       "alwaysAllow": [],
       "autoApprove": []
@@ -37,6 +37,10 @@ Google Apps Scriptを管理するMCPサーバーです
   }
 }
 ```
+
+**ワークスペースディレクトリの指定方法:**
+- 環境変数 `WORKSPACE_DIR` を使用（推奨）
+- または、コマンドライン引数 `--workspacedir` を使用
 
 ### 環境設定（env）
 

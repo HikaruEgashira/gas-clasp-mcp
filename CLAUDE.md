@@ -14,7 +14,10 @@ This is a Model Context Protocol (MCP) server that provides Google Apps Script c
 deno cache mcp.ts
 
 # Run the MCP server directly
-deno run --allow-read --allow-run --allow-env --allow-net mcp.ts --rootdir /path/to/project
+deno run --allow-read --allow-run --allow-env --allow-net mcp.ts --workspacedir /path/to/project
+
+# Or using environment variable
+WORKSPACE_DIR=/path/to/project deno run --allow-read --allow-run --allow-env --allow-net mcp.ts
 
 # Run tests
 deno test --allow-run --allow-net --allow-env --allow-read tests/
@@ -34,14 +37,13 @@ docker buildx build --load -t gas-clasp-mcp .
 - `tests/` - Integration tests using MCP Client SDK
 
 ### MCP Tools
-The server exposes 7 clasp-related tools:
+The server exposes 6 clasp-related tools:
 1. `clasp_setup` - Environment setup and clasp installation
-2. `clasp_logout` - Google account logout
-3. `clasp_create` - New project creation
-4. `clasp_clone` - Clone existing projects
-5. `clasp_pull` - Pull remote changes
-6. `clasp_push_and_deploy` - Push and deploy with environment switching
-7. `clasp_list` - List available projects
+2. `clasp_create` - New project creation
+3. `clasp_clone` - Clone existing projects
+4. `clasp_pull` - Pull remote changes
+5. `clasp_push_and_deploy` - Push and deploy with environment switching
+6. `clasp_list` - List available projects
 
 ### Environment Management
 - Supports `development` and `production` environments
@@ -58,6 +60,6 @@ The server exposes 7 clasp-related tools:
 
 - Built on Deno runtime with JSR package distribution
 - Uses `@modelcontextprotocol/sdk` for MCP protocol implementation
-- All tools accept `rootDir` parameter (auto-injected from CLI args)
+- All tools accept `workspaceDir` parameter (auto-injected from CLI args or WORKSPACE_DIR environment variable)
 - Error handling uses custom `formatErrorMessage` utility
 - Zod schemas for argument validation on all tools

@@ -5,7 +5,7 @@ import { Tool } from "npm:@modelcontextprotocol/sdk@1.5.0/types.js";
 import {
   checkClaspInstalled,
   ClaspSetupArgsSchema,
-  getRootDir,
+  getWorkspaceDir,
   installClasp,
   runCommand,
   toToolSchema,
@@ -32,8 +32,8 @@ export async function claspSetup(args: z.infer<typeof ClaspSetupArgsSchema>) {
     global: globalInstall,
     listProjects,
   } = args;
-  const validRootDir = resolve(getRootDir());
-  await ensureDir(validRootDir);
+  const validWorkspaceDir = resolve(getWorkspaceDir());
+  await ensureDir(validWorkspaceDir);
 
   let output = `Setup started.\n`;
   let installed = await checkClaspInstalled();
@@ -60,7 +60,7 @@ export async function claspSetup(args: z.infer<typeof ClaspSetupArgsSchema>) {
     try {
       await runCommand(
         ["clasp", "login"],
-        validRootDir,
+        validWorkspaceDir,
       );
       output +=
         `Login command executed. Check terminal/browser if interaction needed.\n`;
@@ -81,7 +81,7 @@ export async function claspSetup(args: z.infer<typeof ClaspSetupArgsSchema>) {
     try {
       const projects = await runCommand(
         ["clasp", "list"],
-        validRootDir,
+        validWorkspaceDir,
       );
       output += projects;
     } catch (error) {

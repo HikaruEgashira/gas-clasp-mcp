@@ -4,7 +4,7 @@ import { ensureDir } from "jsr:@std/fs@1/ensure-dir";
 import { Tool } from "npm:@modelcontextprotocol/sdk@1.5.0/types.js";
 import {
   ClaspCreateArgsSchema,
-  getRootDir,
+  getWorkspaceDir,
   runCommand,
   toToolSchema,
 } from "./common.ts";
@@ -19,12 +19,12 @@ export const CLASP_CREATE_TOOL: Tool = {
 
 export async function claspCreate(args: z.infer<typeof ClaspCreateArgsSchema>) {
   const { title, type } = args;
-  const validRootDir = resolve(getRootDir());
-  await ensureDir(validRootDir);
+  const validWorkspaceDir = resolve(getWorkspaceDir());
+  await ensureDir(validWorkspaceDir);
 
   const cmd = ["clasp", "create", "--title", title];
   if (type) cmd.push("--type", type);
 
-  const result = await runCommand(cmd, validRootDir);
+  const result = await runCommand(cmd, validWorkspaceDir);
   return result;
 }
