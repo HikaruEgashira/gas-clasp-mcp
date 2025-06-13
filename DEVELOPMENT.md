@@ -8,7 +8,12 @@
    ```
 3. **直接実行**:
    ```bash
-   deno run --allow-read --allow-run --allow-env --allow-net mcp.ts --rootdir /path/to/project
+   deno run --allow-read --allow-run --allow-env --allow-net mcp.ts --workspacedir /path/to/project
+   ```
+   
+   または、環境変数を使用:
+   ```bash
+   WORKSPACE_DIR=/path/to/project deno run --allow-read --allow-run --allow-env --allow-net mcp.ts
    ```
 
 ## Build with Docker

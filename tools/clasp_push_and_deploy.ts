@@ -2,7 +2,7 @@ import { z } from "npm:zod@3.22.5";
 import { Tool } from "npm:@modelcontextprotocol/sdk@1.5.0/types.js";
 import {
   checkGitStatus,
-  getRootDir,
+  getWorkspaceDir,
   runCommand,
   toToolSchema,
   validatePath,
@@ -42,9 +42,9 @@ export async function claspPushAndDeploy(
     );
   }
 
-  const rootDir = getRootDir();
-  const envConfigPath = `${rootDir}/.clasp.${args.env}.json`;
-  const targetConfigPath = `${rootDir}/.clasp.json`;
+  const workspaceDir = getWorkspaceDir();
+  const envConfigPath = `${workspaceDir}/.clasp.${args.env}.json`;
+  const targetConfigPath = `${workspaceDir}/.clasp.json`;
 
   try {
     await Deno.stat(envConfigPath);
@@ -55,13 +55,13 @@ export async function claspPushAndDeploy(
   const envConfig = await Deno.readTextFile(envConfigPath);
   await Deno.writeTextFile(targetConfigPath, envConfig);
 
-  const validRootDir = await validatePath(rootDir);
+  const validWorkspaceDir = await validatePath(workspaceDir);
 
   const pushCmd = ["clasp", "push"];
   if (args.force) pushCmd.push("--force");
   if (args.watch) pushCmd.push("--watch");
 
-  const pushResult = await runCommand(pushCmd, validRootDir);
+  const pushResult = await runCommand(pushCmd, validWorkspaceDir);
 
   if (!args.deploy) {
     return pushResult;
@@ -75,7 +75,7 @@ export async function claspPushAndDeploy(
 
   // Check Git status for production environment
   if (args.env === "production") {
-    const { branch, isClean } = await checkGitStatus(validRootDir);
+    const { branch, isClean } = await checkGitStatus(validWorkspaceDir);
     if (branch !== "main" || !isClean) {
       throw new Error(
         "Production deploys require being on the 'main' branch with no uncommitted changes.",
@@ -87,7 +87,7 @@ export async function claspPushAndDeploy(
   if (args.version) deployCmd.push("--versionNumber", args.version);
   if (args.description) deployCmd.push("--description", args.description);
 
-  const deployResult = await runCommand(deployCmd, validRootDir);
+  const deployResult = await runCommand(deployCmd, validWorkspaceDir);
 
   return `Push completed:\n${pushResult}\n\nDeployment (${args.env}) initiated:\n${deployResult}`;
 }

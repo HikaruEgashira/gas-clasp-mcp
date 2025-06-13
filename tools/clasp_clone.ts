@@ -1,11 +1,9 @@
 import { z } from "npm:zod@3.22.5";
-import { resolve } from "jsr:@std/path@1/resolve";
-import { ensureDir } from "jsr:@std/fs@1/ensure-dir";
 import { dirname } from "jsr:@std/path@1/dirname";
 import { Tool } from "npm:@modelcontextprotocol/sdk@1.5.0/types.js";
 import {
   ClaspCloneArgsSchema,
-  getRootDir,
+  getWorkspaceDir,
   runCommand,
   toToolSchema,
 } from "./common.ts";
@@ -20,16 +18,16 @@ export const CLASP_CLONE_TOOL: Tool = {
 
 export async function claspClone(args: z.infer<typeof ClaspCloneArgsSchema>) {
   const { scriptId } = args;
-  const validRootDir = getRootDir();
+  const validWorkspaceDir = getWorkspaceDir();
 
   const cmd = [
     "clasp",
     "clone",
     scriptId,
     "--rootDir",
-    validRootDir,
+    validWorkspaceDir,
   ];
 
-  const result = await runCommand(cmd, dirname(validRootDir));
+  const result = await runCommand(cmd, dirname(validWorkspaceDir));
   return result;
 }

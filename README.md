@@ -25,11 +25,11 @@ Google Apps Scriptを管理するMCPサーバーです
         "--allow-run",
         "--allow-env",
         "--allow-net",
-        "jsr:@hikae/gas-clasp-mcp/mcp.ts",
-        "--rootdir",
-        "/Users/xxx/workspace"
+        "jsr:@hikae/gas-clasp-mcp/mcp.ts"
       ],
-      "env": {},
+      "env": {
+        "WORKSPACE_DIR": "/Users/xxx/workspace"
+      },
       "disabled": false,
       "alwaysAllow": [],
       "autoApprove": []

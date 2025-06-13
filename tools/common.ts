@@ -73,16 +73,16 @@ export async function installClasp(globalInstall: boolean): Promise<void> {
 }
 
 export async function checkGitStatus(
-  rootDir: string,
+  workspaceDir: string,
 ): Promise<{ branch: string; isClean: boolean }> {
   try {
     const branch = (await runCommand(
       ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-      rootDir,
+      workspaceDir,
     )).trim();
     const status = await runCommand(
       ["git", "status", "--porcelain"],
-      rootDir,
+      workspaceDir,
     );
     const isClean = status.trim() === "";
     return { branch, isClean };
@@ -97,14 +97,14 @@ export async function checkGitStatus(
   }
 }
 
-let globalRootDir: string = Deno.cwd();
+let globalWorkspaceDir: string = Deno.cwd();
 
-export function getRootDir(): string {
-  return globalRootDir;
+export function getWorkspaceDir(): string {
+  return globalWorkspaceDir;
 }
 
-export async function setRootDir(rootDir: string): Promise<void> {
-  const absolutePath = resolve(rootDir);
+export async function setWorkspaceDir(workspaceDir: string): Promise<void> {
+  const absolutePath = resolve(workspaceDir);
 
   try {
     const stat = await Deno.stat(dirname(absolutePath));
@@ -119,7 +119,7 @@ export async function setRootDir(rootDir: string): Promise<void> {
     }
   }
 
-  globalRootDir = absolutePath;
+  globalWorkspaceDir = absolutePath;
 }
 
 // Tool Schema definitions

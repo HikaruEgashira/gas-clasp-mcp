@@ -35,8 +35,8 @@ npx tsx mcp.ts clasp_setup --autoInstall true --autoLogin true --listProjects tr
 
 gas-clasp-mcpは **開発用 (development)** と **本番用 (production)** の2つの環境設定を切り替えて利用できる。
 
-- `rootDir/.clasp.development.json` : 開発用のclasp設定ファイル
-- `rootDir/.clasp.production.json` : 本番用のclasp設定ファイル
+- `workspaceDir/.clasp.development.json` : 開発用のclasp設定ファイル
+- `workspaceDir/.clasp.production.json` : 本番用のclasp設定ファイル
 
 `clasp_push_and_deploy`コマンドは、指定した`env`に応じて
 対応する設定ファイルを `.clasp.json` に自動でコピーし、環境を切り替える。

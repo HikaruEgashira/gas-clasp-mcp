@@ -2,7 +2,7 @@ import { z } from "npm:zod@3.22.5";
 import { Tool } from "npm:@modelcontextprotocol/sdk@1.5.0/types.js";
 import {
   ClaspPullArgsSchema,
-  getRootDir,
+  getWorkspaceDir,
   runCommand,
   toToolSchema,
   validatePath,
@@ -24,9 +24,9 @@ export async function claspPull(args: z.infer<typeof ClaspPullArgsSchema>) {
     );
   }
 
-  const rootDir = getRootDir();
-  const envConfigPath = `${rootDir}/.clasp.${args.env}.json`;
-  const targetConfigPath = `${rootDir}/.clasp.json`;
+  const workspaceDir = getWorkspaceDir();
+  const envConfigPath = `${workspaceDir}/.clasp.${args.env}.json`;
+  const targetConfigPath = `${workspaceDir}/.clasp.json`;
 
   try {
     await Deno.stat(envConfigPath);
@@ -37,9 +37,9 @@ export async function claspPull(args: z.infer<typeof ClaspPullArgsSchema>) {
   const envConfig = await Deno.readTextFile(envConfigPath);
   await Deno.writeTextFile(targetConfigPath, envConfig);
 
-  const validRootDir = await validatePath(rootDir);
+  const validWorkspaceDir = await validatePath(workspaceDir);
   const cmd = ["clasp", "pull"];
 
-  const result = await runCommand(cmd, validRootDir);
+  const result = await runCommand(cmd, validWorkspaceDir);
   return result;
 }
