@@ -1,6 +1,4 @@
 import { z } from "npm:zod@3.22.5";
-import { resolve } from "jsr:@std/path@1/resolve";
-import { ensureDir } from "jsr:@std/fs@1/ensure-dir";
 import { dirname } from "jsr:@std/path@1/dirname";
 import { Tool } from "npm:@modelcontextprotocol/sdk@1.5.0/types.js";
 import {
